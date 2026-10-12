@@ -159,7 +159,7 @@ export default function App() {
         setMapCenter([latitude, longitude]);
 
         // Fly map smoothly to user location with zoom 15
-        if (mapRef.current && !isNaN(latitude) && !isNaN(longitude)) {
+        if (mapRef.current && Number.isFinite(latitude) && Number.isFinite(longitude)) {
           mapRef.current.flyTo(latitude, longitude, 15);
         }
 
@@ -187,7 +187,7 @@ export default function App() {
   // Search location via geocoding
   const handleSearchLocation = (lat: number, lng: number, placeName: string) => {
     setMapCenter([lat, lng]);
-    if (mapRef.current) {
+    if (mapRef.current && Number.isFinite(lat) && Number.isFinite(lng)) {
       mapRef.current.flyTo(lat, lng, 14);
     }
 
@@ -260,7 +260,7 @@ export default function App() {
     setGigs((prev) => [newGig, ...prev]);
     setSelectedGig(newGig);
     setActiveTab('gigs');
-    if (mapRef.current) {
+    if (mapRef.current && Number.isFinite(newGig.latitude) && Number.isFinite(newGig.longitude)) {
       mapRef.current.flyTo(newGig.latitude, newGig.longitude, 16);
     }
     setToastMessage({ text: 'GiG posted! Pinned on the map.', type: 'success' });
@@ -329,6 +329,19 @@ export default function App() {
       profit: gigProfit,
       status: 'Completed',
     });
+  };
+
+  const handleLogin = (email: string) => {
+    const users = getRegisteredUsers();
+    const user = users.find(u => u.email === email.trim());
+    if (user) {
+      persistCurrentUser(user);
+      setCurrentUser(user);
+      setIsSeekerLive(user.isLive);
+      setToastMessage({ text: `Welcome back, ${user.name}!`, type: 'success' });
+    } else {
+      setToastMessage({ text: 'User not found. Please check your email or sign up.', type: 'warn' });
+    }
   };
 
   const handleSignUp = (user: RegisteredUser) => {
@@ -719,6 +732,7 @@ export default function App() {
           <ProfileView
             currentUser={currentUser}
             onSignUp={handleSignUp}
+            onLogin={handleLogin}
             onProfileUpdate={(updated) => {
               if (currentUser) {
                 const updatedUser: RegisteredUser = {

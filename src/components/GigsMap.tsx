@@ -143,7 +143,7 @@ export const GigsMap = React.forwardRef<GigsMapRef, GigsMapProps>(({
       mapInstanceRef.current.fitBounds(bounds, { padding: [60, 60], maxZoom: 16 });
     },
     flyTo: (lat: number, lng: number, zoom = 14) => {
-      if (mapInstanceRef.current && typeof lat === 'number' && typeof lng === 'number' && !isNaN(lat) && !isNaN(lng)) {
+      if (mapInstanceRef.current && Number.isFinite(lat) && Number.isFinite(lng)) {
         mapInstanceRef.current.flyTo([lat, lng], zoom, {
           duration: 1.2,
           easeLinearity: 0.25,
@@ -301,6 +301,8 @@ export const GigsMap = React.forwardRef<GigsMapRef, GigsMapProps>(({
     markersLayer.clearLayers();
 
     gigs.forEach((gig) => {
+      if (typeof gig.latitude !== 'number' || typeof gig.longitude !== 'number' || isNaN(gig.latitude) || isNaN(gig.longitude)) return;
+      
       const isSelected = selectedGig?.id === gig.id;
       const payLabel = gig.payType === 'hourly' ? `R${gig.pay}/h` : `R${gig.pay}`;
 

@@ -97,6 +97,7 @@ const SOCIAL_PLATFORMS = [
 interface ProfileViewProps {
   currentUser?: RegisteredUser | null;
   onSignUp?: (user: RegisteredUser) => void;
+  onLogin?: (email: string) => void;
   onProfileUpdate?: (seeker: Partial<SeekerProfile>) => void;
   onHireSeeker?: () => void;
   isSeekerLive?: boolean;
@@ -109,6 +110,7 @@ interface ProfileViewProps {
 export const ProfileView: React.FC<ProfileViewProps> = ({
   currentUser,
   onSignUp,
+  onLogin,
   onProfileUpdate,
   onHireSeeker,
   isSeekerLive,
@@ -118,7 +120,16 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   onGoToAdmin,
 }) => {
   // Sign up form state (used when no real user is signed up yet)
+  const [authMode, setAuthMode] = useState<'signup' | 'login'>('signup');
+  const [loginEmail, setLoginEmail] = useState('');
   const [formFirstName, setFormFirstName] = useState('');
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onLogin) {
+      onLogin(loginEmail);
+    }
+  };
   const [formMiddleName, setFormMiddleName] = useState('');
   const [formSurname, setFormSurname] = useState('');
   const [formEmail, setFormEmail] = useState('timegig2026@gmail.com');
@@ -378,9 +389,50 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       <div className="h-full w-full bg-white overflow-y-auto pb-28 pt-4 select-text">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 space-y-6">
 
-          <form onSubmit={handleFormSignUp} className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+          <div className="flex bg-slate-100 p-1 rounded-2xl mb-6">
+              <button
+                onClick={() => setAuthMode('signup')}
+                className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${authMode === 'signup' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'}`}
+              >
+                Sign Up
+              </button>
+              <button
+                onClick={() => setAuthMode('login')}
+                className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${authMode === 'login' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'}`}
+              >
+                Login
+              </button>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {authMode === 'login' ? (
+              <form onSubmit={handleLogin} className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+                <div>
+                  <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">
+                    Email Address
+                  </label>
+                  <div className="relative flex items-center">
+                    <Mail className="w-4 h-4 text-slate-400 absolute left-3" />
+                    <input
+                      type="email"
+                      required
+                      placeholder="your.email@example.com"
+                      value={loginEmail}
+                      onChange={(e) => setLoginEmail(e.target.value)}
+                      className="w-full text-xs font-semibold pl-9 pr-3 py-3 rounded-xl border border-slate-300 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3.5 rounded-2xl bg-slate-900 hover:bg-black text-white font-black text-sm shadow-xl hover:shadow-2xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-98"
+                >
+                  <span>Login to Account</span>
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleFormSignUp} className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
               <div>
                 <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">
                   First Name *
@@ -552,6 +604,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
               <span>Complete Sign Up &amp; Go Live</span>
             </button>
           </form>
+            )}
         </div>
       </div>
     );

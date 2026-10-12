@@ -1,0 +1,10 @@
+{
+  "name": "GiGs Map & Discovery",
+  "description": "Clean white template application featuring a full-screen interactive GiGs map, top search bar, zoom controls, user location, and bottom navigation.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

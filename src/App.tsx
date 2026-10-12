@@ -523,14 +523,16 @@ export default function App() {
                   <span className="text-xs font-bold text-slate-800">Tenant</span>
                 </button>
 
-                {/* 6. Admin */}
-                <button
-                  onClick={() => { setActiveTab('admin'); setIsMenuOpen(false); }}
-                  className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/40 hover:bg-white/70 transition-all duration-300 border border-white/20 hover:border-white/40 shadow-sm hover:shadow-xl hover:scale-105"
-                >
-                  <ShieldCheck className="w-4 h-4 text-rose-600" />
-                  <span className="text-xs font-bold text-slate-800">Admin</span>
-                </button>
+                {/* 6. Admin (Visible only to timegig2026@gmail.com) */}
+                {currentUser?.email === 'timegig2026@gmail.com' && (
+                  <button
+                    onClick={() => { setActiveTab('admin'); setIsMenuOpen(false); }}
+                    className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/40 hover:bg-white/70 transition-all duration-300 border border-white/20 hover:border-white/40 shadow-sm hover:shadow-xl hover:scale-105"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-rose-600" />
+                    <span className="text-xs font-bold text-slate-800">Admin</span>
+                  </button>
+                )}
 
                 {/* 7. Help */}
                 <button

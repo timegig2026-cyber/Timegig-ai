@@ -66,7 +66,7 @@ export interface GigFilters {
   searchQuery: string;
 }
 
-export type ActiveTab = 'gigs' | 'seekers' | 'post' | 'tenantportal' | 'admin' | 'profile' | 'help' | 'about';
+export type ActiveTab = 'gigs' | 'seekers' | 'post' | 'tenantportal' | 'admin' | 'profile' | 'help' | 'about' | 'activation';
 
 export interface SeekerProfile {
   id: string;

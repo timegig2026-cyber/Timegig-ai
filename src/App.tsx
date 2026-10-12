@@ -13,6 +13,7 @@ import { GigCardDrawer } from './components/GigCardDrawer';
 import { PostView } from './components/PostView';
 import { SeekersView } from './components/SeekersView';
 import { ProfileView } from './components/ProfileView';
+import { ActivationView } from './components/ActivationView';
 import { TenantPortalView } from './components/TenantPortalView';
 import { AdminPortalView } from './components/AdminPortalView';
 import { calculateDistanceKm } from './data/mockGigs';
@@ -20,7 +21,7 @@ import { Gig, UserLocation, GigFilters, ActiveTab, SeekerProfile, NavigationRout
 import { getCurrentUser, getRegisteredUsers, getLiveSeekers, saveRegisteredUser, updateUserLiveStatus, setCurrentUser as persistCurrentUser, addRealActivity, getCapturedReferralCode, saveTenantReferral, saveAdminReferral } from './utils/userStorage';
 import { SeekerProfileModal } from './components/SeekerProfileModal';
 import { HiringModal } from './components/HiringModal';
-import { MapPin, CheckCircle2, AlertCircle, Plus, Menu, X, Users, Compass, CircleUserRound, Building2, ShieldCheck, UserPlus, HelpCircle, Info, Settings, LogOut, ArrowLeft } from 'lucide-react';
+import { MapPin, CheckCircle2, AlertCircle, Plus, Menu, X, Users, Compass, CircleUserRound, Building2, ShieldCheck, UserPlus, HelpCircle, Info, Settings, LogOut, ArrowLeft, Zap } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('gigs');
@@ -560,6 +561,14 @@ export default function App() {
                   <LogOut className="w-4 h-4 text-red-600" />
                   <span className="text-xs font-bold text-slate-800">Logout</span>
                 </button>
+                {/* 10. Activation */}
+                <button
+                  onClick={() => { setActiveTab('activation'); setIsMenuOpen(false); }}
+                  className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/40 hover:bg-white/70 transition-all duration-300 border border-white/20 hover:border-white/40 shadow-sm hover:shadow-xl hover:scale-105"
+                >
+                  <Zap className="w-4 h-4 text-amber-500" />
+                  <span className="text-xs font-bold text-slate-800">Activation</span>
+                </button>
               </div>
             </div>
           </>
@@ -732,6 +741,8 @@ export default function App() {
             onGoToTenantPortal={() => setActiveTab('tenantportal')}
             onGoToAdmin={() => setActiveTab('admin')}
           />
+        ) : activeTab === 'activation' ? (
+          <ActivationView />
         ) : activeTab === 'admin' ? (
           /* Admin Portal */
           <AdminPortalView onBackToProfile={() => { setActiveTab('gigs'); setIsMenuOpen(true); }} />
